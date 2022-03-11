@@ -111,7 +111,7 @@ class FSImageNetGenerator(object):
 
             logging.info("Writing photos....")
             for cls in tqdm(split_synset_keys):
-                this_cls_dir = this_split_dir + "/" + cls
+                this_cls_dir = os.path.join(this_split_dir, cls)
                 if not os.path.exists(this_cls_dir):
                     os.makedirs(this_cls_dir)
 
@@ -119,15 +119,16 @@ class FSImageNetGenerator(object):
                 # Randomize what is kept
                 rng.shuffle(cls_instance_files)
                 cls_instance_files = cls_instance_files[:self.num_instances_per_class]
-                # cls_instance_index = np.array([
-                #     int(filename.split("_")[1].split(".")[0]) for filename in cls_instance_files
-                # ])
+                cls_instance_index = np.array([
+                    int(filename.split("_")[1].split(".")[0]) for filename in cls_instance_files
+                ])
 
-                for image_file in cls_instance_files:
+                for index, image_file in zip(cls_instance_index, cls_instance_files):
+                    image_path = os.path.join(this_cls_dir, str(index) + ".jpg")
                     if self.image_resize == 0:
                         copyfile(
                             image_file,
-                            os.path.join(this_cls_dir, image_file),
+                            image_path,
                         )
                     else:
                         im = cv2.imread(image_file)
@@ -137,7 +138,8 @@ class FSImageNetGenerator(object):
                             interpolation=cv2.INTER_AREA,
                         )
                         cv2.imwrite(
-                            os.path.join(this_cls_dir, image_file), im_resized
+                            image_path,
+                            im_resized
                         )
 
 
