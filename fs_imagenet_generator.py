@@ -153,5 +153,5 @@ class FSImageNetGenerator(object):
 
 if __name__ == "__main__":
     dataset_generator = FSImageNetGenerator(args)
-    dataset_generator.untar_mini()
+    dataset_generator.untar()
     #dataset_generator.process_original_files()
