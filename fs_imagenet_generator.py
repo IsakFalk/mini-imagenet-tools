@@ -86,9 +86,12 @@ class FSImageNetGenerator(object):
     def untar(self):
         for key in self.synset_keys:
             logging.info("Untarring " + key)
-            os.system(
-                "tar xvf " + self.imagenet_dir + "/" + key + ".tar -C " + self.fs_dir
-            )
+            cls_dir = os.path.join(self.imagenet_dir, key)
+            if not os.path.exists(cls_dir):
+                os.makedirs(cls_dir)
+                os.system(
+                    f"tar xvf {cls_dir}.tar -C {cls_dir}"
+                )
         logging.info("All the tar files are untarred")
 
     def process_original_files(self):
@@ -106,18 +109,19 @@ class FSImageNetGenerator(object):
             if not os.path.exists(this_split_dir):
                 os.makedirs(this_split_dir)
 
-            print("Writing photos....")
+            logging.info("Writing photos....")
             for cls in tqdm(split_synset_keys):
                 this_cls_dir = this_split_dir + "/" + cls
                 if not os.path.exists(this_cls_dir):
                     os.makedirs(this_cls_dir)
 
-                cls_instance_files = np.array(list(glob.glob(self.fs_dir + "/*" + cls + "*")))[:self.num_instances_per_class]
+                cls_instance_files = np.array(list(glob.glob(self.imagenet_dir + "/*" + cls + "*")))
                 # Randomize what is kept
                 rng.shuffle(cls_instance_files)
-                cls_instance_index = np.array([
-                    int(filename.split("_")[1].split(".")[0]) for filename in cls_instance_files
-                ])
+                cls_instance_files = cls_instance_files[:self.num_instances_per_class]
+                # cls_instance_index = np.array([
+                #     int(filename.split("_")[1].split(".")[0]) for filename in cls_instance_files
+                # ])
 
                 for image_file in cls_instance_files:
                     if self.image_resize == 0:
