@@ -44,9 +44,9 @@ class FSImageNetGenerator(object):
             self.imagenet_dir = "./imagenet"
             if not os.path.exists(self.imagenet_dir):
                 os.mkdir(self.imagenet_dir)
-            os.system(
-                "tar xvf " + str(self.input_args.tar_dir) + " -C " + self.imagenet_dir
-            )
+                os.system(
+                    "tar xvf " + str(self.input_args.tar_dir) + " -C " + self.imagenet_dir
+                )
         elif self.input_args.imagenet_dir is not None:
             self.imagenet_dir = self.input_args.imagenet_dir
         else:
@@ -153,5 +153,5 @@ class FSImageNetGenerator(object):
 
 if __name__ == "__main__":
     dataset_generator = FSImageNetGenerator(args)
-    dataset_generator.untar()
+    #dataset_generator.untar()
     #dataset_generator.process_original_files()
