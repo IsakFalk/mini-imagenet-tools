@@ -58,8 +58,8 @@ class FSImageNetGenerator(object):
         self._read_synset_keys()
         self._generate_split()
 
-    def _read_synset_keys(self, path="./synset_words.txt"):
-        path = Path(path)
+    def _read_synset_keys(self):
+        path = Path("./synset_keys.txt")
         with open(path, "r") as f:
             self.synset_keys = np.array([line.split(" ")[0] for line in f])
         logging.info(
