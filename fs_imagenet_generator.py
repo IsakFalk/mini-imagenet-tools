@@ -41,7 +41,6 @@ rng = np.random.default_rng(args.seed)
 class FSImageNetGenerator(object):
     def __init__(self, input_args):
         self.tar_dir = input_args.tar_dir
-        self.imagenet_dir = input_args.imagenet_dir
         self.image_resize = input_args.image_resize
         self.num_classes = input_args.num_classes
         self.num_instances_per_class = input_args.num_instances_per_class
@@ -54,8 +53,8 @@ class FSImageNetGenerator(object):
             os.system(
                 "tar xvf " + str(self.tar_dir) + " -C " + self.imagenet_dir
             )
-        elif self.imagenet_dir is not None:
-            self.imagenet_dir = self.imagenet_dir
+        elif self.input_args.imagenet_dir is not None:
+            self.imagenet_dir = self.input_args.imagenet_dir
         else:
             logging.info("You need to specify the ILSVRC2012 source file path")
         self.fs_dir = "./fs_imagenet"
